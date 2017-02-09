@@ -30,10 +30,23 @@ class ProfileSettingVC: UIViewController, UITableViewDataSource,UITableViewDeleg
        
         let nib = UINib(nibName: "ProfileSubinfoCell", bundle: nil)
         ProfileSettingTV.register(nib, forCellReuseIdentifier: "ProfileSubInfoCellID" )
-       // Do any additional setup after loading the view.
-    }
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
+       // Do any additional setup after loading the view.
+        
+        let  gestureScene = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        gestureScene.cancelsTouchesInView = true
+        ProfileSettingTV.addGestureRecognizer(gestureScene)
+        
+        // Adding Gesture in table view  so that keyboard can be hide in the cell
+        // calling hideKeyboard private function
+        
+    }
+    
+    // MARK: PRIVATE FUNCTION
+    
+    @objc private func hideKeyboard(){
+        
+        ProfileSettingTV.endEditing(true)
     }
     
     // MARK: TABLEVIEW FUNCTION
@@ -69,9 +82,8 @@ class ProfileSettingVC: UIViewController, UITableViewDataSource,UITableViewDeleg
             let cell = tableView.dequeueReusableCell(withIdentifier: "infocellID", for: indexPath) as! profileInfo
             cell.infol.text = infoLArray[indexPath.row - 1]["label"]
             cell.infoTF.text = infoLArray[indexPath.row - 1]["value"]
-            return cell
-
             
+            return cell
         }
         
 
@@ -101,7 +113,11 @@ class ProfileCell : UITableViewCell
     override func awakeFromNib() {
         
         super.awakeFromNib()
+        profileIV.layer.masksToBounds = true
         profileIV.layer.cornerRadius = profileIV.frame.width/2
+        profileIV.layer.borderWidth = 2
+        profileIV.layer.borderColor = UIColor.yellow.cgColor
+        
         profileBT.layer.cornerRadius = profileBT.frame.width/2
         
     }
