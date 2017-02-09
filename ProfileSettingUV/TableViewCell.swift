@@ -10,6 +10,8 @@ import UIKit
 
 class TableViewCell: UITableViewCell {
 
+    @IBOutlet weak var infoLable: UILabel!
+    @IBOutlet weak var infoTextField: UITextField!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -26,6 +28,12 @@ class TableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    func  changeTheValue(_ infoLArray : [String:String]) {
+        
+         infoLable.text = infoLArray["label"]
+        infoTextField.text = infoLArray["value"]
+
     }
     
     

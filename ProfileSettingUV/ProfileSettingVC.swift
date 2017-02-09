@@ -28,8 +28,8 @@ class ProfileSettingVC: UIViewController, UITableViewDataSource,UITableViewDeleg
         self.ProfileSettingTV.dataSource = self
         self.ProfileSettingTV.delegate = self
        
-        let nib = UINib(nibName: "ProfileSubinfoCell", bundle: nil)
-        ProfileSettingTV.register(nib, forCellReuseIdentifier: "ProfileSubInfoCellID" )
+        let nib = UINib(nibName: "TableViewCell", bundle: nil)
+        ProfileSettingTV.register(nib, forCellReuseIdentifier: "tableViewCellID" )
         
        // Do any additional setup after loading the view.
         
@@ -53,7 +53,7 @@ class ProfileSettingVC: UIViewController, UITableViewDataSource,UITableViewDeleg
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         tableView.endEditing(true)
-        return 10
+        return 9
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -71,22 +71,19 @@ class ProfileSettingVC: UIViewController, UITableViewDataSource,UITableViewDeleg
             return cell
             
         }
-        else if indexPath.row == infoLArray.count + 2{
-            
-            let cell = tableView.dequeueReusableCell(withIdentifier:  "ProfileSubInfoCellID", for: indexPath) as! ProfileSubinfoCell
-            
-            return cell
-        }
+        
+      
         else{
            
-            let cell = tableView.dequeueReusableCell(withIdentifier: "infocellID", for: indexPath) as! profileInfo
-            cell.infol.text = infoLArray[indexPath.row - 1]["label"]
-            cell.infoTF.text = infoLArray[indexPath.row - 1]["value"]
-            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "tableViewCellID", for: indexPath) as! TableViewCell
+//            cell.infol.text = infoLArray[indexPath.row - 1]["label"]
+//            cell.infoTF.text = infoLArray[indexPath.row - 1]["value"]
+//  
+            cell.changeTheValue(infoLArray[indexPath.row - 1])
             return cell
         }
         
-
+     	
 }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     
@@ -101,7 +98,16 @@ class ProfileSettingVC: UIViewController, UITableViewDataSource,UITableViewDeleg
     }
     
 }
-    
+    // data persistent function
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        if indexPath.row != 0 && indexPath.row != infoLArray.count+1
+        {
+            let cell = tableView.cellForRow(at: indexPath) as! TableViewCell
+            infoLArray[indexPath.row - 1]["value"] = cell.infoTextField.text
+        }
+    }
+
 }
 
 // MARK: PROFILE  CELL
@@ -124,13 +130,13 @@ class ProfileCell : UITableViewCell
 }
 
 // MARK: INFO CELL
-
-class profileInfo : UITableViewCell
-{
-    
-    @IBOutlet weak var infol: UILabel!
-    @IBOutlet weak var infoTF: UITextField!
-}
+//
+//class profileInfo : UITableViewCell
+//{
+//    
+//    @IBOutlet weak var infol: UILabel!
+//    @IBOutlet weak var infoTF: UITextField!
+//}
 
 // MARK: SUBMIT 
 
