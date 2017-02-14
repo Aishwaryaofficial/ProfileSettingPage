@@ -12,9 +12,12 @@ import UIKit
 class ProfileSettingVC: UIViewController, UITableViewDataSource,UITableViewDelegate {
 
     @IBOutlet weak var ProfileSettingTV: UITableView!
-    
+     
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+   
     var infoLArray : [[String:String]]=[
-        ["label":"FULL NAME","value" : "jhon Smith"],
+   
+            ["label":"FULL NAME","value" : "jhon Smith"],
         ["label": "EMALE","value" : "jhonsmith@address.com"],
         ["label": "PASSWORD","value" : "**********"],
         ["label":"BIRTHDAY","value" : "August 26,1996"],
@@ -31,23 +34,62 @@ class ProfileSettingVC: UIViewController, UITableViewDataSource,UITableViewDeleg
         let nib = UINib(nibName: "TableViewCell", bundle: nil)
         ProfileSettingTV.register(nib, forCellReuseIdentifier: "tableViewCellID" )
         
+        }
+        
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardDidShow, object: nil, queue: OperationQueue.main, using: {(Notification) -> Void in
+            
+            guard let keyboardHeight = (Notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height
+                else
+            {return }
+            
+            self.bottomConstraint.constant = keyboardHeight
+            
+            
+            
+        })
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillHide, object: nil, queue: OperationQueue.main, using: {(Notification) -> Void in
+            
+            
+            self.bottomConstraint.constant = 0
+            
+            
+        })
+    }
+    
+    
+    //MARK: removing notification center
+    override func viewDidDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self)
+    }
+        
+    
+
+        
+        
+        
+        
        // Do any additional setup after loading the view.
         
-        let  gestureScene = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        gestureScene.cancelsTouchesInView = true
-        ProfileSettingTV.addGestureRecognizer(gestureScene)
+//        let  gestureScene = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+//        gestureScene.cancelsTouchesInView = true
+//        ProfileSettingTV.addGestureRecognizer(gestureScene)
         
         // Adding Gesture in table view  so that keyboard can be hide in the cell
         // calling hideKeyboard private function
         
-    }
+ 
     
     // MARK: PRIVATE FUNCTION
     
-    @objc private func hideKeyboard(){
-        
-        ProfileSettingTV.endEditing(true)
-    }
+//    @objc private func hideKeyboard(){
+//        
+//        ProfileSettingTV.endEditing(true)
+//    }
+    // MARK: NOTIFICATION FUNCTION
+    
     
     // MARK: TABLEVIEW FUNCTION
     
@@ -108,8 +150,8 @@ class ProfileSettingVC: UIViewController, UITableViewDataSource,UITableViewDeleg
         }
     }
 
-}
 
+}
 // MARK: PROFILE  CELL
 class ProfileCell : UITableViewCell
 {
